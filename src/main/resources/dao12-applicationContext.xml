@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/spring" />
+        <property name="username" value="root" />
+        <property name="password" value="kdw71007050^" />
+    </bean>
+    <bean id="userDao12Add" class="spring.ch3_template.c_template_method_pattern.UserDao12Add">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="userDao12Get" class="spring.ch3_template.c_template_method_pattern.UserDao12Get">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="userDao12DeleteAll" class="spring.ch3_template.c_template_method_pattern.UserDao12DeleteAll">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="userDao12GetCount" class="spring.ch3_template.c_template_method_pattern.UserDao12GetCount">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+</beans>
