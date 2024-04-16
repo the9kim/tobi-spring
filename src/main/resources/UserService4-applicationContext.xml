@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/spring" />
+        <property name="username" value="root" />
+        <property name="password" value="kdw71007050^" />
+    </bean>
+    <bean id="jdbcContext18" class="spring.ch5_service_abstraction.d_transaction_demarcation.JdbcContext18" />
+    <bean id="userDao19" class="spring.ch5_service_abstraction.d_transaction_demarcation.UserDao19">
+        <property name="jdbcContext18" ref="jdbcContext18" />
+    </bean>
+    <bean id="userService4" class="spring.ch5_service_abstraction.d_transaction_demarcation.UserService4">
+        <property name="userDao19" ref="userDao19" />
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+</beans>
