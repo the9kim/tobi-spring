@@ -1,11 +1,10 @@
-package spring.ch6_aop.h_proxy_factory_bean;
+package spring.ch6_aop.i_proxy_auto_creation;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailSender;
@@ -13,13 +12,11 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.PlatformTransactionManager;
 import spring.ch5_service_abstraction.Level;
 import spring.ch5_service_abstraction.h_mail_service.User3;
 import spring.ch5_service_abstraction.h_mail_service.UserDao3;
 import spring.ch6_aop.a_extraction_of_transaction.UserService;
 import spring.ch6_aop.a_extraction_of_transaction.UserService9Impl;
-import spring.ch6_aop.g_factory_bean.TxProxyFactoryBean;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -33,24 +30,20 @@ import static spring.ch5_service_abstraction.c_refactoring_oop.UserService3.MIN_
 import static spring.ch5_service_abstraction.c_refactoring_oop.UserService3.MIN_RECOMMEND_FOR_GOLD;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/UserService14-Test-applicationContext.xml")
-public class UserService14Test {
+@ContextConfiguration("/UserService15-Test-applicationContext.xml")
+public class UserService15Test {
 
     public static void main(String[] args) {
-        JUnitCore.main("spring.ch6_aop.h_proxy_factory_bean.UserService14Test");
+        JUnitCore.main("spring.ch6_aop.i_proxy_auto_creation.UserService15Test");
     }
 
-    static class TestUserService9 extends UserService9Impl {
-        private String id;
-
-        private TestUserService9(String id) {
-            this.id = id;
-        }
+    static class TestUserService9Impl extends UserService9Impl {
+        private String id = "4";
 
         @Override
         public void upgradeLevel(User3 user) throws SQLException {
             if (user.getId().equals(this.id)) {
-                throw new UserService14Test.TestUserServiceException();
+                throw new UserService15Test.TestUserServiceException();
             }
             super.upgradeLevel(user);
         }
@@ -61,10 +54,11 @@ public class UserService14Test {
     }
 
     @Autowired
-    ApplicationContext context;
+    UserService userService;
 
+    // Since a proxy object will be inserted in this variable, the type should be an interface the proxy implement
     @Autowired
-    UserService9Impl userService9Impl;
+    UserService testUserService9Impl;
 
     @Autowired
     UserDao3 userDaoJdbc3;
@@ -94,8 +88,8 @@ public class UserService14Test {
 
         User3 leveled = users.get(4);
 
-        userService9Impl.add(nonLeveled);
-        userService9Impl.add(leveled);
+        userService.add(nonLeveled);
+        userService.add(leveled);
 
         User3 savedNonLeveled = userDaoJdbc3.get(nonLeveled.getId());
         User3 savedLeveled = userDaoJdbc3.get(leveled.getId());
@@ -106,15 +100,15 @@ public class UserService14Test {
 
     @Test
     public void upgradeLevels() throws SQLException {
-        UserService9Impl userService9Impl = new UserService9Impl();
+        UserService9Impl userService = new UserService9Impl();
         MailSender mockMailSender = mock(MailSender.class);
-        userService9Impl.setMailSender(mockMailSender);
+        userService.setMailSender(mockMailSender);
 
         UserDao3 mockUserDao = mock(UserDao3.class);
         when(mockUserDao.getAll()).thenReturn(this.users);
-        userService9Impl.setUserDao3(mockUserDao);
+        userService.setUserDao3(mockUserDao);
 
-        userService9Impl.upgradeLevels();
+        userService.upgradeLevels();
 
         verify(mockUserDao, times(2)).update(any(User3.class));
         verify(mockUserDao).update(users.get(1));
@@ -141,15 +135,6 @@ public class UserService14Test {
     @Test
     @DirtiesContext
     public void upgradeAllOrNothing() throws SQLException {
-
-        UserService9Impl target = new UserService14Test.TestUserService9(users.get(3).getId());
-        target.setUserDao3(this.userDaoJdbc3);
-        target.setMailSender(this.mailSender);
-
-        ProxyFactoryBean pfBean = context.getBean("&userService", ProxyFactoryBean.class);
-        pfBean.setTarget(target);
-        UserService proxy = (UserService) pfBean.getObject();
-
         userDaoJdbc3.deleteAll();
 
         for (User3 user : users) {
@@ -157,9 +142,9 @@ public class UserService14Test {
         }
 
         try {
-            proxy.upgradeLevels();
+            this.testUserService9Impl.upgradeLevels();
             fail("TestUserServiceException expected");
-        } catch (UserService14Test.TestUserServiceException e) {
+        } catch (UserService15Test.TestUserServiceException e) {
         }
         checkLevel(users.get(1), false);
     }
