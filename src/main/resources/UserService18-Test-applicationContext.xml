@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/spring"/>
+        <property name="username" value="root"/>
+        <property name="password" value="kdw71007050^"/>
+    </bean>
+    <bean id="userDao3" class="spring.ch5_service_abstraction.h_mail_service.UserDaoJdbc3">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="mailSender" class="spring.ch5_service_abstraction.h_mail_service.DummyMailSender"/>
+    <bean id="userService" class="spring.ch6_aop.l_transaction_attribute.UserService10Impl">
+        <property name="userDao3" ref="userDao3"/>
+        <property name="mailSender" ref="mailSender"/>
+    </bean>
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    <bean name="testUserService10Impl"
+          class="spring.ch6_aop.l_transaction_attribute.UserService18Test$TestUserService10Impl"
+          parent="userService">
+    </bean>
+<!--    <bean id="transactionAdvice" class="org.springframework.transaction.interceptor.TransactionInterceptor" >-->
+<!--        <property name="transactionManager" ref="transactionManager" />-->
+<!--        <property name="transactionAttributes">-->
+<!--            <props>-->
+<!--                <prop key="get*">PROPAGATION_REQUIRED,readOnly,timeout_30</prop>-->
+<!--                <prop key="*">PROPAGATION_REQUIRES_NEW,ISOLATION_SERIALIZABLE</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+<!--    </bean>-->
+    <aop:config>
+        <aop:pointcut id="transactionPointcut" expression="bean(*Service*)"/>
+        <aop:advisor id="transactionAdvisor" advice-ref="transactionAdvice" pointcut-ref="transactionPointcut"/>
+    </aop:config>
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+<!--            <tx:method name="get*" propagation="REQUIRED" read-only="true" timeout="30" />-->
+<!--            <tx:method name="*" propagation="REQUIRES_NEW" />-->
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="*" />
+        </tx:attributes>
+    </tx:advice>
+</beans>
