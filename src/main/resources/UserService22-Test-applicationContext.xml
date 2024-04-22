@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/spring"/>
+        <property name="username" value="root"/>
+        <property name="password" value="kdw71007050^"/>
+    </bean>
+    <bean id="userDao3" class="spring.ch7_sql_separation.b_sql_property_map.UserDaoJdbc5">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sqlMap">
+            <map>
+                <entry key="add" value="INSERT INTO users3(id, name, password, email, level, login, recommend) VALUES(?,?,?,?,?,?,?)" />
+                <entry key="get" value="SELECT * FROM users3 WHERE id = ?" />
+                <entry key="getAll" value="SELECT * FROM users3" />
+                <entry key="getCount" value="SELECT COUNT(id) AS count FROM users3 ORDER BY id ASC" />
+                <entry key="update" value="UPDATE users3 SET name = ?, password = ?, email = ?, level = ?, login = ?, recommend = ? WHERE id = ?" />
+                <entry key="deleteAll" value="DELETE FROM users3" />
+            </map>
+        </property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="mailSender" class="spring.ch5_service_abstraction.h_mail_service.DummyMailSender"/>
+    <bean id="userService" class="spring.ch6_aop.m_annotation_transaction.UserService11Impl">
+        <property name="userDao3" ref="userDao3"/>
+        <property name="mailSender" ref="mailSender"/>
+    </bean>
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    <bean name="testUserService11Impl"
+          class="spring.ch7_sql_separation.b_sql_property_map.UserService22Test$TestUserService11Impl"
+          parent="userService">
+    </bean>
+    <tx:annotation-driven />
+</beans>
