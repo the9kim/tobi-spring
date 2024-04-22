@@ -1,4 +1,4 @@
-package spring.ch6_aop.n_transaction_annotation_test;
+package spring.ch7_sql_separation.a_sql_property;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,11 +35,11 @@ import static spring.ch5_service_abstraction.c_refactoring_oop.UserService3.MIN_
 import static spring.ch5_service_abstraction.c_refactoring_oop.UserService3.MIN_RECOMMEND_FOR_GOLD;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/UserService20-Test-applicationContext.xml")
-public class UserService20Test {
+@ContextConfiguration("/UserService21-Test-applicationContext.xml")
+public class UserService21Test {
 
     public static void main(String[] args) {
-        JUnitCore.main("spring.ch6_aop.n_transaction_annotation_test.UserService20Test");
+        JUnitCore.main("spring.ch7_sql_separation.a_sql_property.UserService21Test");
     }
 
     static class TestUserService11Impl extends UserService11Impl {
@@ -48,7 +48,7 @@ public class UserService20Test {
         @Override
         public void upgradeLevel(User3 user) throws SQLException {
             if (user.getId().equals(this.id)) {
-                throw new UserService20Test.TestUserServiceException();
+                throw new UserService21Test.TestUserServiceException();
             }
             super.upgradeLevel(user);
         }
@@ -66,7 +66,7 @@ public class UserService20Test {
     UserService2 testUserService11Impl;
 
     @Autowired
-    UserDao3 userDaoJdbc3;
+    UserDao3 userDaoJdbc4;
 
     @Autowired
     PlatformTransactionManager transactionManager;
@@ -87,8 +87,7 @@ public class UserService20Test {
     @Test
     @Transactional
     public void add() {
-        userDaoJdbc3.deleteAll();
-
+        userDaoJdbc4.deleteAll();
         User3 nonLeveled = users.get(0);
         nonLeveled.setLevel(null);
 
@@ -97,8 +96,8 @@ public class UserService20Test {
         userService.add(nonLeveled);
         userService.add(leveled);
 
-        User3 savedNonLeveled = userDaoJdbc3.get(nonLeveled.getId());
-        User3 savedLeveled = userDaoJdbc3.get(leveled.getId());
+        User3 savedNonLeveled = userDaoJdbc4.get(nonLeveled.getId());
+        User3 savedLeveled = userDaoJdbc4.get(leveled.getId());
 
         assertThat(savedNonLeveled.getLevel(), is(Level.BASIC));
         assertThat(savedLeveled.getLevel(), is(leveled.getLevel()));
@@ -131,7 +130,7 @@ public class UserService20Test {
     }
 
     public void checkLevel(User3 user, boolean upgraded) {
-        User3 savedUser = userDaoJdbc3.get(user.getId());
+        User3 savedUser = userDaoJdbc4.get(user.getId());
         if (upgraded) {
             assertThat(savedUser.getLevel(), is(user.getLevel().nextLevel()));
         } else {
@@ -142,19 +141,19 @@ public class UserService20Test {
     @Test
     @Transactional(propagation= Propagation.NEVER)
     public void upgradeAllOrNothing() throws SQLException {
-        userDaoJdbc3.deleteAll();
+        userDaoJdbc4.deleteAll();
 
         for (User3 user : users) {
-            userDaoJdbc3.add(user);
+            userDaoJdbc4.add(user);
         }
 
         try {
             this.testUserService11Impl.upgradeLevels();
             fail("TestUserServiceException expected");
-        } catch (UserService20Test.TestUserServiceException e) {
+        } catch (UserService21Test.TestUserServiceException e) {
         }
         checkLevel(users.get(1), false);
-        userDaoJdbc3.deleteAll();
+        userDaoJdbc4.deleteAll();
     }
 
     @Test(expected = TransientDataAccessResourceException.class)
