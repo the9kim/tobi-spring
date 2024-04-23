@@ -1,12 +1,10 @@
-package spring.ch7_sql_separation.d_jaxb.learing_test;
+package spring.ch7_sql_separation.d_jaxb;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import org.junit.Test;
-import spring.ch7_sql_separation.d_jaxb.SqlType;
-import spring.ch7_sql_separation.d_jaxb.Sqlmap;
 
 import java.io.File;
 import java.io.FileNotFoundException;

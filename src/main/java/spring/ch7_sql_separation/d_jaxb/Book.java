@@ -1,4 +1,4 @@
-package spring.ch7_sql_separation.d_jaxb.learing_test;
+package spring.ch7_sql_separation.d_jaxb;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
