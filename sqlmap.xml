@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sqlmap>
+    <sql key="userAdd">
+        <value>INSERT INTO users3(id, name, password, email, level, login, recommend) VALUES(?,?,?,?,?,?,?)</value>
+    </sql>
+    <sql key="userGet">
+        <value>SELECT * FROM users3 WHERE id = ?</value>
+    </sql>
+    <sql key="userGetAll">
+        <value>SELECT * FROM users3</value>
+    </sql>
+    <sql key="userGetCount">
+        <value>SELECT COUNT(id) AS count FROM users3 ORDER BY id ASC</value>
+    </sql>
+    <sql key="userUpdate">
+        <value>UPDATE users3 SET name = ?, password = ?, email = ?, level = ?, login = ?, recommend = ? WHERE id = ?</value>
+    </sql>
+    <sql key="userDeleteAll">
+        <value>DELETE FROM users3</value>
+    </sql>
+</sqlmap>
