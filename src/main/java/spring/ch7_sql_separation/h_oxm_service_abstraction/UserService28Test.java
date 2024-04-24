@@ -39,7 +39,7 @@ import static spring.ch5_service_abstraction.c_refactoring_oop.UserService3.MIN_
 public class UserService28Test {
 
     public static void main(String[] args) {
-        JUnitCore.main("spring.ch7_sql_separation.h_service_abstraction.UserService28Test");
+        JUnitCore.main("spring.ch7_sql_separation.h_oxm_service_abstraction.UserService28Test");
     }
 
     static class TestUserService11Impl extends UserService11Impl {

@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
 public class UserDaoJdbc11Test {
 
     public static void main(String[] args) {
-        JUnitCore.main("spring.ch7_sql_separation.h_service_abstraction.UserDaoJdbc11Test");
+        JUnitCore.main("spring.ch7_sql_separation.h_oxm_service_abstraction.UserDaoJdbc11Test");
     }
 
     @Autowired
