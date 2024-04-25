@@ -35,7 +35,7 @@ public class JaxbTest2 {
     Marshaller marshaller;
 
     public static void main(String[] args) {
-        JUnitCore.main("spring.ch7_sql_separation.h_service_abstraction.JaxbTest2");
+        JUnitCore.main("spring.ch7_sql_separation.h_oxm_service_abstraction.JaxbTest2");
     }
 
     @Test
