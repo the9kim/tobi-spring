@@ -18,7 +18,7 @@ import static org.junit.Assert.assertThat;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/UserService8-applicationContext.xml")
+@ContextConfiguration(locations = "/UserService8-Test-applicationContext.xml")
 public class UserDaoJdbc3Test {
 
     public static void main(String[] args) {
