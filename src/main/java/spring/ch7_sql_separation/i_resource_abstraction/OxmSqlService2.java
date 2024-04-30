@@ -26,7 +26,6 @@ public class OxmSqlService2 implements SqlService {
     public void loadSql() {
         baseSqlService.setSqlReader(this.oxmSqlReader);
         baseSqlService.setSqlRegistry(this.sqlRegistry);
-
         baseSqlService.loadSql();
     }
 
