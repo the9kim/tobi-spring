@@ -1,8 +1,10 @@
-package spring.ch7_sql_separation.m_annotation;
+package spring.ch7_sql_separation.n_auto_wiring;
 
 import com.mysql.jdbc.Driver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -23,18 +25,22 @@ import spring.ch7_sql_separation.d_jaxb.Sqlmap;
 import spring.ch7_sql_separation.f_interface_separation.SqlRegistry;
 import spring.ch7_sql_separation.i_resource_abstraction.OxmSqlService2;
 import spring.ch7_sql_separation.k_embedded_db.EmbeddedDbSqlRegistry;
+import spring.ch7_sql_separation.m_annotation.UserService32Test;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
 
 @Configuration
 @EnableTransactionManagement
-//@ImportResource("/UserService32-Test-applicationContext.xml")
-public class TestApplicationContext {
+@ComponentScan(basePackages="spring")
+public class TestApplicationContext2 {
+
+    @Autowired
+    UserDao3 userDao3;
 
     @Bean
+    @Qualifier("dataSource")
     public DataSource dataSource() {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         dataSource.setDriverClass(Driver.class);
@@ -52,31 +58,28 @@ public class TestApplicationContext {
         return transactionManager;
     }
 
-//    @Autowired
-//    SqlService sqlService;
+//    @Bean
+//    public UserDao3 userDao3() {
+//        UserDaoJdbc7 userDaoJdbc7 = new UserDaoJdbc7();
+//        userDaoJdbc7.setDataSource(dataSource());
+//        userDaoJdbc7.setSqlService(sqlService());
+//        return userDaoJdbc7;
+//    }
+
+//    @Bean
+//    public UserService2 userService() {
+//        UserService12Impl userService12 = new UserService12Impl();
+//        userService12.setUserDao3(this.userDao3);
+//        userService12.setMailSender(mailSender());
+//        return userService12;
+//    }
 
     @Bean
-    public UserDao3 userDao3() {
-        UserDaoJdbc6 userDaoJdbc6 = new UserDaoJdbc6();
-        userDaoJdbc6.setDataSource(dataSource());
-        userDaoJdbc6.setSqlService(sqlService());
-        return userDaoJdbc6;
-    }
-
-    @Bean
-    public UserService2 userService() {
-        UserService11Impl userService11 = new UserService11Impl();
-        userService11.setUserDao3(userDao3());
-        userService11.setMailSender(mailSender());
-        return userService11;
-    }
-
-    @Bean
-    public UserService2 testUserService11Impl() {
-        UserService32Test.TestUserService11Impl testUserService11 = new UserService32Test.TestUserService11Impl();
-        testUserService11.setUserDao3(userDao3());
-        testUserService11.setMailSender(mailSender());
-        return testUserService11;
+    public UserService2 testUserService12Impl() {
+        UserService33Test.TestUserService12Impl testUserService12 = new UserService33Test.TestUserService12Impl();
+        testUserService12.setUserDao3(this.userDao3);
+        testUserService12.setMailSender(mailSender());
+        return testUserService12;
     }
 
     @Bean
@@ -93,10 +96,6 @@ public class TestApplicationContext {
         return oxmSqlService2;
     }
 
-    // the annotation to get a spring bean using an id of bean instead of a type
-//    @Resource
-//    DataSource embeddedDatabase;
-
     @Bean
     public SqlRegistry sqlRegistry() {
         EmbeddedDbSqlRegistry sqlRegistry = new EmbeddedDbSqlRegistry();
@@ -112,6 +111,7 @@ public class TestApplicationContext {
     }
 
     @Bean
+    @Qualifier("embeddedDatabase")
     public DataSource embeddedDatabase() {
         EmbeddedDatabaseBuilder embeddedDbBuilder = new EmbeddedDatabaseBuilder();
         return embeddedDbBuilder
