@@ -1,5 +1,6 @@
 package spring.ch7_sql_separation.n_auto_wiring;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -12,14 +13,18 @@ import spring.ch6_aop.l_transaction_attribute.UserService2;
 import java.sql.SQLException;
 import java.util.List;
 
-@Service
+//@Component
+@Service("userService")
 @Transactional
 public class UserService12Impl implements UserService2 {
 
     public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
     public static final int MIN_RECOMMEND_FOR_GOLD = 30;
 
+    @Autowired
     private UserDao3 userDao3;
+
+    @Autowired
     private MailSender mailSender;
 
     public void upgradeLevels() throws SQLException {
@@ -70,17 +75,17 @@ public class UserService12Impl implements UserService2 {
         }
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public User3 get(String userId) {
         return userDao3.get(userId);
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<User3> getAll() {
         return userDao3.getAll();
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public int getCount() {
         return userDao3.getCount();
     }
