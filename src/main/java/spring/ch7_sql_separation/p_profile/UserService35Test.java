@@ -45,7 +45,7 @@ public class UserService35Test {
         JUnitCore.main("spring.ch7_sql_separation.p_profile.UserService35Test");
     }
 
-    public static class TestUserService12Impl extends UserService12Impl {
+    public static class TestUserService14Impl extends UserService12Impl {
         private String id = "4";
 
         @Override
@@ -66,7 +66,7 @@ public class UserService35Test {
 
     // Since a proxy object will be inserted in this variable, the type should be an interface the proxy implement
     @Autowired
-    UserService2 testUserService12Impl;
+    UserService2 testUserService14Impl;
 
     @Autowired
     UserDao3 userDaoJdbc4;
@@ -162,7 +162,7 @@ public class UserService35Test {
         }
 
         try {
-            this.testUserService12Impl.upgradeLevels();
+            this.testUserService14Impl.upgradeLevels();
             fail("TestUserServiceException expected");
         } catch (UserService35Test.TestUserServiceException e) {
         }

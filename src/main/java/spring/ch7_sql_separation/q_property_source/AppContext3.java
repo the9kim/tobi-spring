@@ -17,6 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import spring.ch5_service_abstraction.h_mail_service.DummyMailSender;
 import spring.ch6_aop.l_transaction_attribute.UserService2;
+import spring.ch7_sql_separation.p_profile.UserService35Test;
 
 import javax.sql.DataSource;
 
@@ -110,8 +111,8 @@ public class AppContext3 {
     @Profile("test")
     public static class TestContext3 {
         @Bean
-        public UserService2 testUserService12Impl() {
-            return new UserService36Test.TestUserService12Impl();
+        public UserService2 testUserService15Impl() {
+            return new UserService36Test.TestUserService15Impl();
         }
 
         @Bean

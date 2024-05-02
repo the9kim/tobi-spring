@@ -10,8 +10,8 @@ import spring.ch6_aop.l_transaction_attribute.UserService2;
 public class TestAppContext {
 
     @Bean
-    public UserService2 testUserService12Impl() {
-        return new UserService34Test.TestUserService12Impl();
+    public UserService2 testUserService13Impl() {
+        return new UserService34Test.TestUserService13Impl();
     }
 
     @Bean

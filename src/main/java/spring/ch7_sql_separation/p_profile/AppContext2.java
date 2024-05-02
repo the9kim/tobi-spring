@@ -62,8 +62,8 @@ public class AppContext2 {
     @Profile("test")
     public static class TestContext2 {
         @Bean
-        public UserService2 testUserService12Impl() {
-            return new UserService35Test.TestUserService12Impl();
+        public UserService2 testUserService14Impl() {
+            return new UserService35Test.TestUserService14Impl();
         }
 
         @Bean
